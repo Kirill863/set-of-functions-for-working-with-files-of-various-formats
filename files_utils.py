@@ -99,3 +99,16 @@ def append_txt(data, file_path, encoding='utf-8'):
     """
     with codecs.open(file_path, 'a', encoding=encoding) as file:
         file.write(data)
+
+import yaml
+
+def read_yaml(file_path):
+    """
+    Читает данные из YAML-файла.
+
+    :param file_path: Путь к файлу.
+    :return: Данные, считанные из файла.
+    """
+    with open(file_path, 'r', encoding='utf-8') as file:
+        data = yaml.safe_load(file)
+    return data
