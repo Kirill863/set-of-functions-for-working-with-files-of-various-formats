@@ -60,7 +60,7 @@ def write_csv(data, file_path, delimiter=';', encoding='windows-1251'):
     :param delimiter: Разделитель полей в файле (по умолчанию ';').
     :param encoding: Кодировка файла (по умолчанию 'windows-1251').
     """
-    with codecs.open(file_path, 'w', encoding=encoding) as file:
+    with open(file_path, 'w', encoding=encoding, newline='') as file:
         writer = csv.writer(file, delimiter=delimiter)
         writer.writerows(data)
 
@@ -73,7 +73,7 @@ def append_csv(data, file_path, delimiter=';', encoding='windows-1251'):
     :param delimiter: Разделитель полей в файле (по умолчанию ';').
     :param encoding: Кодировка файла (по умолчанию 'windows-1251').
     """
-    with codecs.open(file_path, 'a', encoding=encoding) as file:
+    with open(file_path, 'a', encoding=encoding, newline='') as file:
         writer = csv.writer(file, delimiter=delimiter)
         writer.writerows(data)
 
