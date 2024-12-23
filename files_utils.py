@@ -66,3 +66,36 @@ def append_csv(data, file_path, delimiter=';', encoding='windows-1251'):
         writer = csv.writer(file, delimiter=delimiter)
         writer.writerows(data)
 
+def read_txt(file_path, encoding='utf-8'):
+    """
+    Читает данные из текстового файла.
+
+    :param file_path: Путь к файлу.
+    :param encoding: Кодировка файла (по умолчанию 'utf-8').
+    :return: Содержимое файла.
+    """
+    with codecs.open(file_path, 'r', encoding=encoding) as file:
+        content = file.read()
+    return content
+
+def write_txt(data, file_path, encoding='utf-8'):
+    """
+    Записывает данные в текстовый файл.
+
+    :param data: Данные для записи.
+    :param file_path: Путь к файлу.
+    :param encoding: Кодировка файла (по умолчанию 'utf-8').
+    """
+    with codecs.open(file_path, 'w', encoding=encoding) as file:
+        file.write(data)
+
+def append_txt(data, file_path, encoding='utf-8'):
+    """
+    Добавляет данные в конец текстового файла.
+
+    :param data: Данные для добавления.
+    :param file_path: Путь к файлу.
+    :param encoding: Кодировка файла (по умолчанию 'utf-8').
+    """
+    with codecs.open(file_path, 'a', encoding=encoding) as file:
+        file.write(data)
