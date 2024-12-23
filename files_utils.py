@@ -2,6 +2,7 @@ import json
 import os
 import csv
 import codecs
+import yaml
 
 def read_json(file_path: str, encoding: str = "utf-8"):
     # Читает данные из JSON-файла.
@@ -15,14 +16,24 @@ def write_json(data, file_path: str, encoding: str = "utf-8"):
         json.dump(data, file, ensure_ascii=False, indent=4)
 
 def append_json(data: list[dict], file_path: str, encoding: str = "utf-8"):
-    # Открываем файл в режиме добавления
-    with open(file_path, 'a', encoding=encoding) as file:
-        # Преобразуем данные в JSON и добавляем в файл
-        json.dump(data, file)
-        # Добавляем новую строку для разделения записей
-        file.write('\n')
+    # Проверяем, существует ли файл
+    if os.path.exists(file_path):
+        # Читаем существующие данные из файла
+        with open(file_path, 'r', encoding=encoding) as file:
+            existing_data = json.load(file)
+        # Если существующие данные являются списком, добавляем новые данные
+        if isinstance(existing_data, list):
+            existing_data.extend(data)
+        else:
+            # Если существующие данные не являются списком, создаем новый список
+            existing_data = [existing_data] + data
+    else:
+        # Если файл не существует, создаем новый список с данными
+        existing_data = data
 
-
+    # Записываем обновленные данные обратно в файл
+    with open(file_path, 'w', encoding=encoding) as file:
+        json.dump(existing_data, file, ensure_ascii=False, indent=4)
 
 def read_csv(file_path, delimiter=';', encoding='windows-1251'):
     """
@@ -99,8 +110,6 @@ def append_txt(data, file_path, encoding='utf-8'):
     """
     with codecs.open(file_path, 'a', encoding=encoding) as file:
         file.write(data)
-
-import yaml
 
 def read_yaml(file_path):
     """

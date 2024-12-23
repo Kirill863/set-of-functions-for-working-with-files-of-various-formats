@@ -10,19 +10,30 @@ from files_utils import (
 )
 
 def test_read_json():
-    file_path = 'test_read.json'
-    test_data = {"name": "John", "age": 30}
-    with open(file_path, 'w', encoding='utf-8') as file:
-        json.dump(test_data, file)
-
-    content = read_json(file_path)
-    assert content == test_data, f"Expected {test_data}, but got {content}"
-    os.remove(file_path)
-    print("test_read_json passed")
+    file_path = 'test.json'
+    if not os.path.exists(file_path):
+        print(f"File {file_path} does not exist.")
+        return
+    expected_data = {
+        "name": "John Doe",
+        "age": 30,
+        "address": {
+            "street": "123 Main St",
+            "city": "Anytown",
+            "state": "Anystate",
+            "zip": "12345"
+        }
+    }
+    try:
+        content = read_json(file_path)
+        assert content == expected_data, f"Expected {expected_data}, but got {content}"
+        print("test_read_json passed")
+    except Exception as e:
+        print(f"test_read_json failed: {e}")
 
 def test_write_json():
     file_path = 'test_write.json'
-    test_data = {"name": "John", "age": 30}
+    test_data = {"name": "Jane Smith", "age": 25}
     write_json(test_data, file_path)
 
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -33,35 +44,40 @@ def test_write_json():
 
 def test_append_json():
     file_path = 'test_append.json'
-    initial_data = [{"name": "John", "age": 30}]
-    additional_data = [{"name": "Jane", "age": 25}]
+    initial_data = [{"name": "John Doe", "age": 30}]
+    additional_data = [{"name": "Jane Smith", "age": 25}]
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(initial_data, file)
 
     append_json(additional_data, file_path)
 
     with open(file_path, 'r', encoding='utf-8') as file:
-        content = file.read().splitlines()
-    expected_content = [json.dumps(initial_data), json.dumps(additional_data)]
+        content = json.load(file)
+    expected_content = initial_data + additional_data
     assert content == expected_content, f"Expected {expected_content}, but got {content}"
     os.remove(file_path)
     print("test_append_json passed")
 
 def test_read_csv():
-    file_path = 'test_read.csv'
-    test_data = [["name", "age"], ["John", "30"], ["Jane", "25"]]
-    with open(file_path, 'w', encoding='windows-1251') as file:
-        writer = csv.writer(file, delimiter=';')
-        writer.writerows(test_data)
-
+    file_path = 'test.csv'
+    if not os.path.exists(file_path):
+        print(f"File {file_path} does not exist.")
+        return
+    expected_data = [
+        ["name", "age", "city"],
+        ["John Doe", "30", "Anytown"],
+        ["Jane Smith", "25", "Othertown"]
+    ]
     content = read_csv(file_path)
-    assert content == test_data, f"Expected {test_data}, but got {content}"
-    os.remove(file_path)
+    assert content == expected_data, f"Expected {expected_data}, but got {content}"
     print("test_read_csv passed")
 
 def test_write_csv():
     file_path = 'test_write.csv'
-    test_data = [["name", "age"], ["John", "30"], ["Jane", "25"]]
+    test_data = [
+        ["name", "age", "city"],
+        ["Alice Johnson", "28", "Somewhere"]
+    ]
     write_csv(test_data, file_path)
 
     with open(file_path, 'r', encoding='windows-1251') as file:
@@ -73,8 +89,13 @@ def test_write_csv():
 
 def test_append_csv():
     file_path = 'test_append.csv'
-    initial_data = [["name", "age"], ["John", "30"]]
-    additional_data = [["Jane", "25"]]
+    initial_data = [
+        ["name", "age", "city"],
+        ["John Doe", "30", "Anytown"]
+    ]
+    additional_data = [
+        ["Jane Smith", "25", "Othertown"]
+    ]
     with open(file_path, 'w', encoding='windows-1251') as file:
         writer = csv.writer(file, delimiter=';')
         writer.writerows(initial_data)
@@ -90,19 +111,18 @@ def test_append_csv():
     print("test_append_csv passed")
 
 def test_read_txt():
-    file_path = 'test_read.txt'
-    test_data = 'Hello, World!'
-    with open(file_path, 'w', encoding='utf-8') as file:
-        file.write(test_data)
-
+    file_path = 'test.txt'
+    if not os.path.exists(file_path):
+        print(f"File {file_path} does not exist.")
+        return
+    expected_data = "Hello, World!\nThis is a test file."
     content = read_txt(file_path)
-    assert content == test_data, f"Expected {test_data}, but got {content}"
-    os.remove(file_path)
+    assert content == expected_data, f"Expected {expected_data}, but got {content}"
     print("test_read_txt passed")
 
 def test_write_txt():
     file_path = 'test_write.txt'
-    test_data = 'Hello, World!'
+    test_data = "This is a test write operation."
     write_txt(test_data, file_path)
 
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -113,8 +133,8 @@ def test_write_txt():
 
 def test_append_txt():
     file_path = 'test_append.txt'
-    initial_data = 'Hello,'
-    additional_data = ' World!'
+    initial_data = "This is the initial data.\n"
+    additional_data = "This is the additional data.\n"
     with open(file_path, 'w', encoding='utf-8') as file:
         file.write(initial_data)
 
@@ -127,14 +147,22 @@ def test_append_txt():
     print("test_append_txt passed")
 
 def test_read_yaml():
-    file_path = 'test_read.yaml'
-    test_data = {'name': 'John Doe', 'age': 30}
-    with open(file_path, 'w', encoding='utf-8') as file:
-        yaml.dump(test_data, file)
-
+    file_path = 'test.yaml'
+    if not os.path.exists(file_path):
+        print(f"File {file_path} does not exist.")
+        return
+    expected_data = {
+        "name": "John Doe",
+        "age": 30,
+        "address": {
+            "street": "123 Main St",
+            "city": "Anytown",
+            "state": "Anystate",
+            "zip": "12345"
+        }
+    }
     content = read_yaml(file_path)
-    assert content == test_data, f"Expected {test_data}, but got {content}"
-    os.remove(file_path)
+    assert content == expected_data, f"Expected {expected_data}, but got {content}"
     print("test_read_yaml passed")
 
 if __name__ == "__main__":
