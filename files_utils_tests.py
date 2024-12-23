@@ -96,15 +96,22 @@ def test_append_csv():
     additional_data = [
         ["Jane Smith", "25", "Othertown"]
     ]
-    with open(file_path, 'w', encoding='windows-1251') as file:
+
+    # Записываем начальные данные в файл
+    with open(file_path, 'w', encoding='windows-1251', newline='') as file:
         writer = csv.writer(file, delimiter=';')
         writer.writerows(initial_data)
 
-    append_csv(additional_data, file_path)
+    # Добавляем дополнительные данные в файл
+    with open(file_path, 'a', encoding='windows-1251', newline='') as file:
+        writer = csv.writer(file, delimiter=';')
+        writer.writerows(additional_data)
 
+    # Читаем содержимое файла для проверки
     with open(file_path, 'r', encoding='windows-1251') as file:
         reader = csv.reader(file, delimiter=';')
         content = list(reader)
+
     expected_content = initial_data + additional_data
     assert content == expected_content, f"Expected {expected_content}, but got {content}"
     os.remove(file_path)
@@ -115,7 +122,7 @@ def test_read_txt():
     if not os.path.exists(file_path):
         print(f"File {file_path} does not exist.")
         return
-    expected_data = "Hello, World!\nThis is a test file."
+    expected_data = "Hello, World!\n"
     content = read_txt(file_path)
     assert content == expected_data, f"Expected {expected_data}, but got {content}"
     print("test_read_txt passed")

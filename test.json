@@ -4,7 +4,6 @@
     "address": {
         "street": "123 Main St",
         "city": "Anytown",
-        "state": "Anystate",
-        "zip": "12345"
+        "state": "Anystate"
     }
 }
